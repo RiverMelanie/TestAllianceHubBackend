@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    UserMapper userMapper1;
+    UserMapper userMapper;
 
     public User login(String username, String password, String companyName) {
-        return userMapper1.finduserForLogin(username, password, companyName);
+        return userMapper.finduserForLogin(username, password, companyName);
     }
 }
