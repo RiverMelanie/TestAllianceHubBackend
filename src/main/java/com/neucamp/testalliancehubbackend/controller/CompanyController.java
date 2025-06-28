@@ -13,7 +13,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/company")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(
+        origins = "*",
+        allowedHeaders = "*",
+        methods = {RequestMethod.POST, RequestMethod.GET},
+        maxAge = 3600
+)
 public class CompanyController {
     private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
 

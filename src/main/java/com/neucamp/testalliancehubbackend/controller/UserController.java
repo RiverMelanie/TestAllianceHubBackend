@@ -171,7 +171,7 @@ public class UserController {
     }
 
     //移动端登录
-    @PostMapping("/mobileLogin")
+    @RequestMapping("/mobileLogin")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         User user = userService.login(
                 loginRequest.getUsername(),
