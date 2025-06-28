@@ -187,7 +187,6 @@ public class UserController {
             userInfo.put("nickname", user.getNickname());
             userInfo.put("email", user.getEmail());
             userInfo.put("phone", user.getPhone());
-            userInfo.put("company_id", user.getCompany_id());
             return ResponseEntity.ok(userInfo);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

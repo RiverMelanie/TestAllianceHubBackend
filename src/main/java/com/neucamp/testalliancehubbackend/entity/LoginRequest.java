@@ -28,4 +28,7 @@ public class LoginRequest {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+    public LoginRequest() {
+    }
 }
