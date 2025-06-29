@@ -1,21 +1,30 @@
 package com.neucamp.testalliancehubbackend.controller;
 
+import com.neucamp.testalliancehubbackend.Service.UserService;
+import com.neucamp.testalliancehubbackend.entity.LoginRequest;
 import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.CompanyMapper;
 import com.neucamp.testalliancehubbackend.mapper.UserMapper;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(
+        origins = "*",
+        allowedHeaders = "*",
+        methods = {RequestMethod.POST, RequestMethod.GET},
+        maxAge = 3600
+)
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -24,6 +33,9 @@ public class UserController {
 
     @Autowired
     private CompanyMapper companyMapper;
+
+    @Autowired
+    private UserService userService;
 
     //登录
     @PostMapping("/login")
@@ -155,6 +167,30 @@ public class UserController {
             response.put("success", false);
             response.put("message", "服务器内部错误");
             return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    //移动端登录
+    @PostMapping("/mobileLogin")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        User user = userService.login(
+                loginRequest.getUsername(),
+                loginRequest.getPassword(),
+                loginRequest.getCompanyName()
+        );
+
+        if (user != null) {
+            // 可选择只返回必要字段，如 id、username、email 等
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("user_id", user.getUser_id());
+            userInfo.put("username", user.getUsername());
+            userInfo.put("nickname", user.getNickname());
+            userInfo.put("email", user.getEmail());
+            userInfo.put("phone", user.getPhone());
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("message", "用户名、密码或公司名错误"));
         }
     }
 

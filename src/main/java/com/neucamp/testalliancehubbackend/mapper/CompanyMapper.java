@@ -26,4 +26,8 @@ public interface CompanyMapper {
     @Select("SELECT COUNT(*) FROM company WHERE company_id = #{companyId}")
     int checkCompanyExists(Integer companyId);
 
+    //查找对应的公司id
+    @Select("SELECT company_id from company where company_name = #{company_name}")
+    String getCompanyid(String company_name);
+
 }
