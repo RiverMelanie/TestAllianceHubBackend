@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neucamp.testalliancehubbackend.entity.Meeting;
 import com.neucamp.testalliancehubbackend.mapper.MeetingMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -34,11 +38,11 @@ public class MeetingController {
     }
 
     @RequestMapping("/getMeetingsBy")
-    public PageInfo<Meeting> getMeetingsBy(@RequestParam String creator_name, @RequestParam String meeting_name, @RequestParam LocalDate meeting_date,
+    public PageInfo<Meeting> getMeetingsBy(@RequestParam(required = false) String creator_name, @RequestParam(required = false) String meeting_name, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start_time,
                                            @RequestParam(defaultValue = "1") int currentPage, @RequestParam(defaultValue = "5") int pageSize) {
         try {
             PageHelper.startPage(currentPage, pageSize);
-            List<Meeting> meetings = meetingMapper.getMeetingsBy(creator_name,meeting_name,meeting_date);
+            List<Meeting> meetings = meetingMapper.getMeetingsBy(creator_name,meeting_name,start_time);
             return new PageInfo<>(meetings);
         }finally {
             PageHelper.clearPage();
@@ -66,5 +70,10 @@ public class MeetingController {
         return meetingMapper.updateMeeting(meeting);
     }
 
-
+    @RequestMapping("/updateStatu")
+    public int updateMeetingAuditStatus(@RequestBody Map<String,Object> params){
+        int meeting_id = Integer.parseInt(params.get("meeting_id").toString());
+        int audit_status = Integer.parseInt(params.get("audit_status").toString());
+        return meetingMapper.updateMeetingAuditStatus(meeting_id, audit_status);
+    }
 }

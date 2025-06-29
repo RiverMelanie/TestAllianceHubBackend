@@ -11,8 +11,7 @@ public class Meeting {
     private Integer meeting_id;
     private String cover_url;
     private String meeting_name;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate meeting_date;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime start_time;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -26,11 +25,10 @@ public class Meeting {
     public Meeting() {
     }
 
-    public Meeting(Integer meeting_id, String cover_url, String meeting_name, LocalDate meeting_date, LocalDateTime start_time, LocalDateTime end_time, String content, LocalDateTime create_time, String creator_name, Integer audit_status) {
+    public Meeting(Integer meeting_id, String cover_url, String meeting_name, LocalDateTime start_time, LocalDateTime end_time, String content, LocalDateTime create_time, String creator_name, Integer audit_status) {
         this.meeting_id = meeting_id;
         this.cover_url = cover_url;
         this.meeting_name = meeting_name;
-        this.meeting_date = meeting_date;
         this.start_time = start_time;
         this.end_time = end_time;
         this.content = content;
@@ -61,14 +59,6 @@ public class Meeting {
 
     public void setMeeting_name(String meeting_name) {
         this.meeting_name = meeting_name;
-    }
-
-    public LocalDate getMeeting_date() {
-        return meeting_date;
-    }
-
-    public void setMeeting_date(LocalDate meeting_date) {
-        this.meeting_date = meeting_date;
     }
 
     public LocalDateTime getStart_time() {
