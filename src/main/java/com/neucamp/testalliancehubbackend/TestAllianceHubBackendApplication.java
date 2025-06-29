@@ -8,7 +8,6 @@ public class TestAllianceHubBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TestAllianceHubBackendApplication.class, args);
-        System.out.println("HelloKitty");
     }
 
 }
