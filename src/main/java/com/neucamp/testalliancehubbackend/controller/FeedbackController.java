@@ -43,12 +43,6 @@ public class FeedbackController {
     @RequestMapping("/feedbackStats")
     public List<FeedbackCatStatsDTO> getFeedbackCategoryStats() {
         List<FeedbackCatStatsDTO> status = feedbackMapper.getCategoryFeedbackStats();
-        System.out.println("==== 会议反馈分类统计数据 ====");
-        for (FeedbackCatStatsDTO stat : status) {
-            System.out.println("类别: " + stat.getCatName() +
-                    "，数量: " + stat.getCount() +
-                    "，占比: " + (stat.getRatio() * 100) + "%");
-        }
         return status;
     }
 }
