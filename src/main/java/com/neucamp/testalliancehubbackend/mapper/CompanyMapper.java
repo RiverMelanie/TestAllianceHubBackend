@@ -12,7 +12,6 @@ public interface CompanyMapper {
     @Select("SELECT COUNT(*) + 1 AS nextId FROM company")
     int getNextCompanyId();
 
-    // 注册新企业
     @Insert("INSERT INTO company (company_name, contact_info, account, password, create_time) " +
             "VALUES (#{companyName}, #{contactInfo}, #{account}, #{password}, NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "companyId")

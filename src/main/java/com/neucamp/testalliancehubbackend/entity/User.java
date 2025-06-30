@@ -1,5 +1,7 @@
 package com.neucamp.testalliancehubbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class User {
@@ -9,9 +11,32 @@ public class User {
     private String nickname;
     private String phone;
     private String email;
-    private Byte gender;
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+
+    private Integer gender;
     private String password;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date create_time;
+
+    public String getFormatted_create_time() {
+        return formatted_create_time;
+    }
+
+    public void setFormatted_create_time(String formatted_create_time) {
+        this.formatted_create_time = formatted_create_time;
+    }
+
+    // 或者添加一个格式化后的字段
+    private String formatted_create_time;
 
     public Integer getUser_id() {
         return user_id;
@@ -59,14 +84,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Byte getGender() {
-        return gender;
-    }
-
-    public void setGender(Byte gender) {
-        this.gender = gender;
     }
 
     public String getPassword() {
