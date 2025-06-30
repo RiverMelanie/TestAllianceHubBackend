@@ -179,5 +179,4 @@ class CourseMapperTest {
         Course updatedCourse = courseMapper.getCourseWithUser(course.getCourse_id());
         assertEquals(2, updatedCourse.getStatus());
     }
-
 }
