@@ -27,16 +27,6 @@ public class CourseController {
     @Autowired
     CourseMapper courseMapper;
 
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
-    }
-    public void setImageDir(String imageDir) {
-        this.imageDir = imageDir;
-    }
-    public void setVideoDir(String videoDir) {
-        this.videoDir = videoDir;
-    }
-
     //分页查询
     @RequestMapping("/getallcrs")
     public Map<String, Object> getallcrs(
