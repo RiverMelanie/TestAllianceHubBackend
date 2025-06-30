@@ -5,6 +5,7 @@ public class FeedbackCatStatsDTO {
     private Long count;
     private Double ratio;
 
+
     public String getCatName() {
         return catName;
     }
