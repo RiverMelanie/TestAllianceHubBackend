@@ -1,6 +1,5 @@
 package com.neucamp.testalliancehubbackend.mapper;
 
-import com.neucamp.testalliancehubbackend.entity.User;
 import org.apache.ibatis.annotations.*;
 
 @Mapper

@@ -2,7 +2,6 @@ package com.neucamp.testalliancehubbackend.controller;
 
 import com.neucamp.testalliancehubbackend.Service.UserService;
 import com.neucamp.testalliancehubbackend.entity.LoginRequest;
-import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.CompanyMapper;
 import com.neucamp.testalliancehubbackend.mapper.UserMapper;
 import org.mybatis.logging.Logger;
@@ -10,13 +9,11 @@ import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 @RestController
 @CrossOrigin(
