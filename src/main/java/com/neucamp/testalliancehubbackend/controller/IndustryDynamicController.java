@@ -2,7 +2,7 @@ package com.neucamp.testalliancehubbackend.controller;
 
 import com.neucamp.testalliancehubbackend.entity.IndustryDynamic;
 import com.neucamp.testalliancehubbackend.entity.dynamicreviewrecordtable;
-import com.neucamp.testalliancehubbackend.entity.user;
+import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.IndustryDynamicMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

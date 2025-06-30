@@ -2,6 +2,7 @@ package com.neucamp.testalliancehubbackend.controller;
 
 import com.neucamp.testalliancehubbackend.Service.UserService;
 import com.neucamp.testalliancehubbackend.entity.LoginRequest;
+import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.CompanyMapper;
 import com.neucamp.testalliancehubbackend.mapper.UserMapper;
 import org.mybatis.logging.Logger;

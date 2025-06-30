@@ -1,5 +1,6 @@
 package com.neucamp.testalliancehubbackend.Service;
 
+import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
