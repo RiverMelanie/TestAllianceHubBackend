@@ -9,5 +9,4 @@ public class TestAllianceHubBackendApplication {
         SpringApplication.run(TestAllianceHubBackendApplication.class, args);
         System.out.println("Hello");
     }
-
 }
