@@ -15,7 +15,6 @@ class WebConfigTest {
     @Autowired
     private WebApplicationContext context;
 
-
     @Test
     void testWebConfigImplementsWebMvcConfigurer() {
         WebConfig webConfig = new WebConfig();

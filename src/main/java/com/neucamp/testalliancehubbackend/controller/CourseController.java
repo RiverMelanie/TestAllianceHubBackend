@@ -30,11 +30,9 @@ public class CourseController {
     public void setUploadDir(String uploadDir) {
         this.uploadDir = uploadDir;
     }
-
     public void setImageDir(String imageDir) {
         this.imageDir = imageDir;
     }
-
     public void setVideoDir(String videoDir) {
         this.videoDir = videoDir;
     }

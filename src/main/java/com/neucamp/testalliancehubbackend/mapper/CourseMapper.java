@@ -3,7 +3,6 @@ package com.neucamp.testalliancehubbackend.mapper;
 import com.neucamp.testalliancehubbackend.entity.Course;
 import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 import java.util.List;
 
 @Mapper
