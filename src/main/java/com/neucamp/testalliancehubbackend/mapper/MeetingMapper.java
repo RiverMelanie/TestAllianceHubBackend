@@ -18,10 +18,10 @@ public interface MeetingMapper {
     List<Meeting> getMeetingsBy(String creator_name, String meeting_name, LocalDateTime start_time);
 
     @Select("select * from meeting where meeting_id = #{meeting_id}")
-    Meeting getMeetingById(int meeting_id);
+    Meeting getMeetingById(Integer meeting_id);
 
     @Delete("delete from meeting where meeting_id=#{meeting_id}")
-    int deleteMeeting(int meeting_id);
+    int deleteMeeting(Integer meeting_id);
 
     @Insert("insert into meeting values (null,#{cover_url},#{meeting_name},#{start_time},#{end_time},#{content},#{create_time},#{creator_name},#{audit_status})")
     int addMeeting(Meeting meeting);

@@ -50,8 +50,11 @@ public class MeetingController {
     }
 
 
-    @RequestMapping("/deleteMeeting")
-    public int deleteMeeting(int meeting_id) {
+    @RequestMapping("/deleteMeeting/{meeting_id}")
+    public int deleteMeeting(@PathVariable Integer meeting_id) {
+        if (meeting_id == null) {
+            throw new IllegalArgumentException("meeting_id 参数不能为 null");
+        }
         Meeting meeting = meetingMapper.getMeetingById(meeting_id);
         if (meeting != null && meeting.getCover_url() != null) {
             String filePath = "./uploads/images/" + meeting.getCover_url();
