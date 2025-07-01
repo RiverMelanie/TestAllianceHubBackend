@@ -1,4 +1,4 @@
-package com.neucamp.testalliancehubbackend.entity;
+package com.neucamp.testalliancehubbackend.mapper;
 
 import com.neucamp.testalliancehubbackend.entity.Company;
 import org.apache.ibatis.annotations.Insert;
