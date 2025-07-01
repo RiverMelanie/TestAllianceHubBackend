@@ -1,5 +1,6 @@
 package com.neucamp.testalliancehubbackend.controller;
 
+import com.neucamp.testalliancehubbackend.entity.Course;
 import com.neucamp.testalliancehubbackend.mapper.CourseMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
