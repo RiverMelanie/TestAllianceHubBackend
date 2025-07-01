@@ -79,5 +79,4 @@ class CourseTest {
         assertEquals(course1.getCreated_at(), course2.getCreated_at());
         assertEquals(course1.getUpdated_at(), course2.getUpdated_at());
     }
-
 }
