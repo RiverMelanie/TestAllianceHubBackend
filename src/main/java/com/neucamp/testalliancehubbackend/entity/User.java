@@ -111,7 +111,7 @@ public class User {
     }
 
     public Byte getIs_super() {
-        return is_super;
+        return is_super != null ? is_super : 0;
     }
 
     public void setIs_super(Byte is_super) {
