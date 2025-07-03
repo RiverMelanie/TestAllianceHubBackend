@@ -5,6 +5,8 @@ import com.neucamp.testalliancehubbackend.entity.dynamicreviewrecordtable;
 import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.IndustryDynamicMapper;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
@@ -22,15 +24,16 @@ public class IndustryDynamicController {
     @Autowired
     IndustryDynamicMapper industryDynamicMapper;
     //添加
+
     @RequestMapping("/addDynamic")
-    public int addstu(@RequestBody IndustryDynamic industryDynamic){
+    public int addDynamic(@Valid @RequestBody IndustryDynamic industryDynamic){
         return industryDynamicMapper.addDynamic(industryDynamic);
     }
     @RequestMapping("/search")
     public Map<String, Object> searchDynamics(
             @RequestParam(defaultValue = "") String title,
             @RequestParam(defaultValue = "") String author,
-            @RequestParam(defaultValue = "1") int pageNum,
+            @RequestParam(defaultValue = "1") @Min(value = 1, message = "分页参数非法") int pageNum,
             @RequestParam(defaultValue = "8") int pageSize
     ) {
 
@@ -63,7 +66,7 @@ public class IndustryDynamicController {
 
 
     @RequestMapping("/addreviewrecord")
-    public void addReviewRecord(@RequestBody dynamicreviewrecordtable dynamicreviewrecordtable){
+    public void addReviewRecord(@Valid @RequestBody dynamicreviewrecordtable dynamicreviewrecordtable){
         industryDynamicMapper.addReviewRecord(
                 dynamicreviewrecordtable.getReviewerID(),
                 dynamicreviewrecordtable.getTitle(),

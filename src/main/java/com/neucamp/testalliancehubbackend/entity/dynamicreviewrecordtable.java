@@ -1,11 +1,14 @@
 package com.neucamp.testalliancehubbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class dynamicreviewrecordtable {
+
     @JsonProperty("ReviewerID")
+    @NotNull(message = "审核人 ID 不能为空")
     private Integer ReviewerID;
     @JsonProperty("Title")
     private String Title;

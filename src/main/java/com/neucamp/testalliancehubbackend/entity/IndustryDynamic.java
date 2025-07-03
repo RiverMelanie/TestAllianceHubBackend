@@ -2,6 +2,7 @@ package com.neucamp.testalliancehubbackend.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class IndustryDynamic{
     /**
      * 标题
      */
-
+    @NotBlank(message = "标题不能为空")
     private String title;
 
     /**
