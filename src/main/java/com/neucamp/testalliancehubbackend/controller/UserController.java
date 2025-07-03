@@ -7,6 +7,7 @@ import org.apache.catalina.deploy.NamingResourcesImpl;
 import org.apache.tomcat.util.descriptor.web.ContextTransaction;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,9 @@ public class UserController {
         }
 
         // 检查用户类型是否匹配
-        boolean isAdmin = dbUser.getIs_super() == 1;
+
+        Byte isSuper = dbUser.getIs_super();
+        boolean isAdmin = isSuper != null && isSuper == 1;
 
         if (("admin".equals(loginType) && !isAdmin)){
             response.put("success", false);
@@ -316,7 +319,7 @@ public class UserController {
             // 移除敏感信息
             users.forEach(u -> {
                 u.setPassword(null);
-                u.setIs_super(null);
+                u.setIs_super((byte) 0);
                 if (u.getCreate_time() != null) {
                     u.setFormatted_create_time(sdf.format(u.getCreate_time()));
                 }
