@@ -14,7 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/uploads/videos/**")
                 .addResourceLocations("file:./uploads/videos/")
                 .setCachePeriod(0);
-
         // 映射图片文件路径
         registry.addResourceHandler("/uploads/images/**")
                 .addResourceLocations("file:./uploads/images/")

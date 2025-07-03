@@ -12,7 +12,6 @@ public class ConferenceService {
     @Autowired
     private MeetingMapper meetingMapper;
 
-
     public List<ConferenceDTO> getAllConferences() {
         return meetingMapper.getAllConferences();  // 直接调用 Mapper 查询
     }
