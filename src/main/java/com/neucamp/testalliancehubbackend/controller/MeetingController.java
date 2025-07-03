@@ -7,7 +7,9 @@ import com.neucamp.testalliancehubbackend.entity.ConferenceDTO;
 import com.neucamp.testalliancehubbackend.entity.Meeting;
 import com.neucamp.testalliancehubbackend.mapper.MeetingMapper;
 import org.slf4j.LoggerFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +49,7 @@ public class MeetingController {
     }
 
     @RequestMapping("/getMeetingsBy")
-    public PageInfo<Meeting> getMeetingsBy(@RequestParam String creator_name, @RequestParam String meeting_name, @RequestParam LocalDateTime start_time,
+    public PageInfo<Meeting> getMeetingsBy(@RequestParam(required = false) String creator_name, @RequestParam(required = false) String meeting_name, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start_time,
                                            @RequestParam(defaultValue = "1") int currentPage, @RequestParam(defaultValue = "5") int pageSize) {
         try {
             PageHelper.startPage(currentPage, pageSize);
@@ -59,8 +61,11 @@ public class MeetingController {
     }
 
 
-    @RequestMapping("/deleteMeeting")
-    public int deleteMeeting(int meeting_id) {
+    @RequestMapping("/deleteMeeting/{meeting_id}")
+    public int deleteMeeting(@PathVariable Integer meeting_id) {
+        if (meeting_id == null) {
+            throw new IllegalArgumentException("meeting_id 参数不能为 null");
+        }
         Meeting meeting = meetingMapper.getMeetingById(meeting_id);
         if (meeting != null && meeting.getCover_url() != null) {
             String filePath = "./uploads/images/" + meeting.getCover_url();
@@ -89,6 +94,11 @@ public class MeetingController {
         System.out.println("创建者字段是否存在: " + conferences.get(0).getCreatorName() != null);
         System.out.println("创建时间字段是否存在: " + conferences.get(0).getCreateTime() != null);
         return ResponseEntity.ok(conferences);
+    @RequestMapping("/updateStatu")
+    public int updateMeetingAuditStatus(@RequestBody Map<String,Object> params){
+        int meeting_id = Integer.parseInt(params.get("meeting_id").toString());
+        int audit_status = Integer.parseInt(params.get("audit_status").toString());
+        return meetingMapper.updateMeetingAuditStatus(meeting_id, audit_status);
     }
 
 }

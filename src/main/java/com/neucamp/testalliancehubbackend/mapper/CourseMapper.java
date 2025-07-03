@@ -3,7 +3,6 @@ package com.neucamp.testalliancehubbackend.mapper;
 import com.neucamp.testalliancehubbackend.entity.Course;
 import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 import java.util.List;
 
 @Mapper
@@ -14,10 +13,9 @@ public interface CourseMapper {
     List<Course> getAllCrs();
 
     //添加课程
-    @Insert("INSERT INTO course VALUES (" +
-            "null, #{course_name}, #{cover_url}, #{description}, " +
-            "#{sort_order}, #{video_url}, #{author}, #{status}, " +
-            "#{created_at,jdbcType=TIMESTAMP}, null, #{created_by})")
+    @Insert("INSERT INTO course(course_name, cover_url, description, sort_order, video_url, author, status, created_at, created_by) " +
+            "VALUES (#{course_name}, #{cover_url}, #{description}, #{sort_order}, #{video_url}, #{author}, #{status}, #{created_at}, #{created_by})")
+    @Options(useGeneratedKeys = true, keyProperty = "course_id", keyColumn = "course_id")
     int addCourse(Course course);
 
     //删除

@@ -1,30 +1,34 @@
 package com.neucamp.testalliancehubbackend.controller;
 
-import com.neucamp.testalliancehubbackend.Service.UserService;
-import com.neucamp.testalliancehubbackend.entity.LoginRequest;
 import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.CompanyMapper;
 import com.neucamp.testalliancehubbackend.mapper.UserMapper;
+import org.apache.catalina.deploy.NamingResourcesImpl;
+import org.apache.tomcat.util.descriptor.web.ContextTransaction;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.sql.Date;
+
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.mybatis.logging.Logger;
+import org.mybatis.logging.LoggerFactory;
+
 @RestController
-@CrossOrigin(
-        origins = "*",
-        allowedHeaders = "*",
-        methods = {RequestMethod.POST, RequestMethod.GET},
-        maxAge = 3600
-)
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -34,8 +38,7 @@ public class UserController {
     @Autowired
     private CompanyMapper companyMapper;
 
-    @Autowired
-    private UserService userService;
+    private NamingResourcesImpl transactionManager;
 
     //登录
     @PostMapping("/login")
@@ -69,7 +72,9 @@ public class UserController {
         }
 
         // 检查用户类型是否匹配
-        boolean isAdmin = dbUser.getIs_super() == 1;
+
+        Byte isSuper = dbUser.getIs_super();
+        boolean isAdmin = isSuper != null && isSuper == 1;
 
         if (("admin".equals(loginType) && !isAdmin)){
             response.put("success", false);
@@ -81,6 +86,10 @@ public class UserController {
             response.put("success", false);
             response.put("message", "管理员账号请使用管理员登录");
             return response;
+        }
+
+        if (dbUser != null) {
+            response.put("token", String.valueOf(dbUser.getUser_id())); // 关键修改
         }
 
         // 登录成功
@@ -111,20 +120,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> registerUser(@RequestBody Map<String, String> registerData) {
         Map<String, Object> response = new HashMap<>();
-
-        try {
-            String companyId = registerData.get("company_id");
-            String username = registerData.get("username");
-            String nickname = registerData.get("nickname");
-            String phone = registerData.get("phone");
-            String email = registerData.get("email");
-            String gender = registerData.get("gender");
-            String password = registerData.get("password");
-
+         try {
 
             // 检查企业是否存在
-            int companyId2 = Integer.parseInt(registerData.get("company_id").toString());
-            if (userMapper.checkCompanyExists(companyId2) == 0) {
+            int companyId = Integer.parseInt(registerData.get("company_id"));
+            if (userMapper.checkCompanyExists(companyId) == 0) {
                 response.put("success", false);
                 response.put("message", "该企业不存在");
                 return ResponseEntity.badRequest().body(response);
@@ -132,22 +132,23 @@ public class UserController {
 
             // 创建用户对象
             User user = new User();
-            user.setCompany_id(Integer.valueOf(companyId));
-            user.setUsername(registerData.get("username").toString());
-            user.setNickname(registerData.get("nickname").toString());
-            user.setPhone(registerData.get("phone").toString());
-            user.setEmail(registerData.get("email").toString());
-
+            user.setCompany_id(companyId);
+            user.setUsername(registerData.get("username"));
+            user.setNickname(registerData.get("nickname"));
+            user.setPhone(registerData.get("phone"));
+            user.setEmail(registerData.get("email"));
             //user.setGender(Integer.parseInt(registerData.get("gender").toString()));
 
-//            String res = registerData.get("gender").toString();
-//            Byte res1 = (byte) Integer.parseInt(res);
-//            user.setGender((byte) res1);
+            int gender  = Integer.parseInt(registerData.get("gender"));
+            if (gender  != 0) {
+                user.setGender(gender);
+            } else {
+                response.put("success", false);
+                response.put("message", "性别参数缺失");
+                return ResponseEntity.badRequest().body(response);
+            }
 
-            user.setPassword(registerData.get("password").toString());
-//            user.setStatus((byte)1); // 默认状态正常
-//            user.setIs_super((byte)0); // 默认不是管理员
-
+            user.setPassword(registerData.get("password"));
 
             // 注册用户
             int result = userMapper.registerUser(user);
@@ -162,8 +163,89 @@ public class UserController {
                 response.put("message", "注册失败");
                 return ResponseEntity.internalServerError().body(response);
             }
+        } catch (NumberFormatException e) {
+            response.put("success", false);
+            response.put("message", "参数格式错误");
+            return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
-            //logger.error((Supplier<String>) e);
+            response.put("success", false);
+            response.put("message", "服务器内部错误：" + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    // 获取用户信息
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable Integer userId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            User user = userMapper.getUserById(userId);
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "用户不存在");
+                return ResponseEntity.notFound().build();
+            }
+
+            // 不返回密码等敏感信息
+            user.setPassword(null);
+            response.put("success", true);
+            response.put("userInfo", user);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "获取用户信息失败");
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    // 更新用户信息
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<Map<String, Object>> updateUserInfo(
+            @PathVariable Integer userId,
+            @RequestBody Map<String, Object> updateData,
+            @RequestHeader("Authorization") String token) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // 验证token和用户权限
+            User currentUser = validateTokenAndGetUser(token);
+            if (currentUser == null || !currentUser.getUser_id().equals(userId)) {
+                response.put("success", false);
+                response.put("message", "无权修改该用户信息");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+
+            User user = userMapper.getUserById(userId);
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "用户不存在");
+                return ResponseEntity.notFound().build();
+            }
+
+            // 只允许修改特定字段
+            if (updateData.containsKey("nickname")) {
+                user.setNickname((String) updateData.get("nickname"));
+            }
+            if (updateData.containsKey("phone")) {
+                user.setPhone((String) updateData.get("phone"));
+            }
+            if (updateData.containsKey("email")) {
+                user.setEmail((String) updateData.get("email"));
+            }
+            if (updateData.containsKey("gender")) {
+                user.setGender((Integer) updateData.get("gender"));
+            }
+
+            int result = userMapper.updateUser(user);
+            if (result > 0) {
+                response.put("success", true);
+                response.put("message", "更新成功");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "更新失败");
+                return ResponseEntity.internalServerError().body(response);
+            }
+        } catch (Exception e) {
             response.put("success", false);
             response.put("message", "服务器内部错误");
             return ResponseEntity.internalServerError().body(response);
