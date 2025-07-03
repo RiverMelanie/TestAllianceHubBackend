@@ -180,7 +180,6 @@ public class UserController {
         );
 
         if (user != null) {
-            // 可选择只返回必要字段，如 id、username、email 等
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("user_id", user.getUser_id());
             userInfo.put("username", user.getUsername());
