@@ -59,4 +59,11 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE token = #{token}")
     User getUserByToken(String token);
 
+    @Select("SELECT u.* FROM user u " +
+            "JOIN company c ON u.company_id = c.company_id " +
+            "WHERE u.username = #{username} AND u.password = #{password} AND c.company_name = #{companyName}")
+    User finduserForLogin(@Param("username") String username,
+                          @Param("password") String password,
+                          @Param("companyName") String companyName);
+
 }
