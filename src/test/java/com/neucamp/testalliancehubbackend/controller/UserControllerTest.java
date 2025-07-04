@@ -34,7 +34,6 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        // 关键修复：使用构造器注入
         userController = new UserController(userMapper, companyMapper);
     }
 
@@ -54,12 +53,8 @@ class UserControllerTest {
         // 执行测试
         Map<String, Object> response = userController.login(loginData);
 
-        // 修改断言 - 比较字符串值而非类型
         assertEquals("1", response.get("token"));  // 注意改为字符串比较
 
-        // 或者调整控制器返回Integer类型（推荐方案）
-        // 在UserController中将token明确转为Integer：
-        // response.put("token", dbUser.getUser_id());
     }
 
     @Test
@@ -106,7 +101,7 @@ class UserControllerTest {
 
     @Test
     void registerUser_Success() {
-        // 1. 准备测试数据
+        
         Map<String, String> registerData = Map.of(
                 "company_id", "999",
                 "username", "testuser",
@@ -117,19 +112,19 @@ class UserControllerTest {
                 "password", "Test@123"
         );
 
-        // 2. 关键发现：控制器实际调用的是userMapper.checkCompanyExists
-        when(userMapper.checkCompanyExists(999)).thenReturn(1);  // 注意这里是userMapper
+        
+        when(userMapper.checkCompanyExists(999)).thenReturn(1);  
         when(userMapper.registerUser(any(User.class))).thenReturn(1);
 
-        // 3. 执行测试
+        
         ResponseEntity<Map<String, Object>> response =
                 userController.registerUser(registerData);
 
-        // 4. 验证mock调用
-        verify(userMapper).checkCompanyExists(999);  // 验证userMapper被调用
+        
+        verify(userMapper).checkCompanyExists(999);  
         verify(userMapper).registerUser(any(User.class));
 
-        // 5. 验证响应
+        
         assertAll(
                 () -> assertEquals(200, response.getStatusCodeValue()),
                 () -> assertTrue((Boolean) response.getBody().get("success")),
@@ -147,7 +142,6 @@ class UserControllerTest {
                 "password", "Test@123"
         );
 
-        // 关键修复：使用userMapper而非companyMapper
         when(userMapper.checkCompanyExists(999)).thenReturn(0);
 
         // 执行测试
@@ -235,8 +229,6 @@ class UserControllerTest {
 
     @Test
     void updateUserInfo_Unauthorized() {
-        // 测试无权限更新用户信息
-        // 移除不必要的 when(userMapper.getUserById(anyInt())).thenReturn(new User());
 
         ResponseEntity<Map<String, Object>> response = userController.updateUserInfo(
                 1,
@@ -376,7 +368,7 @@ class UserControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody().get("users"));
     }
-    // 1. 测试缺少参数的登录
+
     @Test
     void login_MissingParameters() {
         Map<String, Object> loginData = new HashMap<>();
@@ -388,7 +380,7 @@ class UserControllerTest {
         assertEquals("参数不完整", response.get("message"));
     }
 
-    // 2. 测试管理员账号尝试用用户方式登录
+ 
     @Test
     void login_AdminTryUserLogin() {
         Map<String, Object> loginData = new HashMap<>();
@@ -408,22 +400,7 @@ class UserControllerTest {
         assertEquals("管理员账号请使用管理员登录", response.get("message"));
     }
 
-    // 3. 测试注册时性别参数缺失
-//    @Test
-//    void registerUser_MissingGender() {
-//        Map<String, String> registerData = new HashMap<>();
-//        registerData.put("company_id", "1");
-//        registerData.put("username", "testuser");
-//        registerData.put("password", "Test@123");
-//        registerData.put("gender", "0"); // 无效性别
-//
-//        ResponseEntity<Map<String, Object>> response = userController.registerUser(registerData);
-//
-//        assertEquals(400, response.getStatusCodeValue());
-//        assertEquals("性别参数缺失", response.getBody().get("message"));
-//    }
 
-    // 4. 测试更新用户信息数据库异常
     @Test
     void updateUserInfo_DatabaseError() {
         User mockUser = new User();
@@ -445,7 +422,7 @@ class UserControllerTest {
         assertEquals("服务器内部错误", response.getBody().get("message"));
     }
 
-    // 5. 测试修改密码数据库异常
+ 
     @Test
     void changePassword_DatabaseError() {
         User mockUser = new User();
@@ -469,7 +446,6 @@ class UserControllerTest {
         assertEquals("服务器内部错误", response.getBody().get("message"));
     }
 
-    // 6. 测试获取用户列表数据库异常
     @Test
     void getUserList_DatabaseError() {
         User mockUser = new User();
@@ -485,7 +461,7 @@ class UserControllerTest {
         assertEquals("获取用户列表失败", response.getBody().get("message"));
     }
 
-    // 7. 测试通过用户名获取用户信息数据库异常
+
     @Test
     void getUserByUsername_DatabaseError() {
         when(userMapper.getUserByUsername(anyString())).thenThrow(new RuntimeException("DB error"));
@@ -499,7 +475,6 @@ class UserControllerTest {
         assertEquals("获取用户信息失败", response.getBody().get("message"));
     }
 
-    // 8. 测试验证token失败情况
     @Test
     void validateTokenAndGetUser_InvalidToken() {
         // 使用反射测试私有方法
@@ -519,7 +494,6 @@ class UserControllerTest {
         }
     }
 
-    // 9. 测试更新用户信息不同字段组合
     @Test
     void updateUserInfo_DifferentFieldCombinations() {
         User mockUser = new User();
@@ -543,7 +517,6 @@ class UserControllerTest {
         assertEquals(200, response2.getStatusCodeValue());
     }
 
-    // 10. 测试修改密码失败（影响行数为0）
     @Test
     void changePassword_UpdateFailed() {
         User mockUser = new User();
@@ -610,47 +583,6 @@ class UserControllerTest {
         ResponseEntity<Map<String, Object>> response = userController.getUserInfo(1);
         assertEquals(500, response.getStatusCodeValue());
     }
-    // UserControllerTest.java 新增测试用例
-//    @Test
-//    void login_EmptyCredentials() {
-//        // 准备测试数据 - 空用户名和密码
-//        Map<String, Object> loginData = new HashMap<>();
-//        loginData.put("uname", "");
-//        loginData.put("upwd", "");
-//        loginData.put("loginType", "user");
-//
-//        // 调用方法
-//        Map<String, Object> response = userController.login(loginData);
-//
-//        // 验证结果
-//        assertFalse((Boolean) response.get("success"));
-//        assertEquals("参数不完整", response.get("message"));
-//    }
-
-//    @Test
-//    void registerUser_InvalidGender() {
-//        // 准备测试数据 - 无效性别参数
-//        Map<String, String> registerData = Map.of(
-//                "company_id", "1",
-//                "username", "testuser",
-//                "nickname", "Test User",
-//                "phone", "13800138000",
-//                "email", "test@example.com",
-//                "gender", "3", // 无效性别值
-//                "password", "Test@123"
-//        );
-//
-//        // 模拟企业存在
-//        when(userMapper.checkCompanyExists(1)).thenReturn(1);
-//
-//        // 调用方法
-//        ResponseEntity<Map<String, Object>> response = userController.registerUser(registerData);
-//
-//        // 验证结果 - 应触发性别参数错误
-//        assertEquals(400, response.getStatusCodeValue());
-//        assertEquals("性别参数缺失", response.getBody().get("message"));
-//    }
-
     @Test
     void updateUserInfo_OnlyPartialFields() {
         // 准备测试数据 - 只更新部分字段
@@ -683,7 +615,7 @@ class UserControllerTest {
 
         // 验证结果
         assertFalse((Boolean) response.get("success"));
-        //assertEquals("参数不完整", response.get("message"));
+
     }
 
     @Test
@@ -706,7 +638,6 @@ class UserControllerTest {
         ResponseEntity<Map<String, Object>> response = userController.registerUser(registerData);
 
         // 验证结果 - 应触发性别参数错误
-        //assertEquals(400, response.getStatusCodeValue());
         //assertEquals("性别参数缺失", response.getBody().get("message"));
     }
 
@@ -722,7 +653,6 @@ class UserControllerTest {
         User filteredUser = new User();
         filteredUser.setUser_id(2);
         filteredUser.setUsername("filteredUser");
-        //when(userMapper.getUsersByCondition(any(Map.class))).thenReturn(Collections.singletonList(filteredUser));
 
         // 构造带筛选参数的token（实际项目中可能通过请求参数传递）
         Map<String, Object> params = new HashMap<>();
@@ -762,12 +692,9 @@ class UserControllerTest {
         ResponseEntity<Map<String, Object>> response = userController.registerUser(registerData);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
-        //assertEquals("企业不存在", response.getBody().get("message"));
+
     }
 
-    /**
-     * 测试更新用户信息时的字段验证
-     */
     @Test
     void updateUserInfo_InvalidEmail() {
         User mockUser = new User();
@@ -779,30 +706,10 @@ class UserControllerTest {
 
         ResponseEntity<Map<String, Object>> response = userController.updateUserInfo(1, updateData, "1");
 
-        //assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
         //assertEquals("邮箱格式不正确", response.getBody().get("message"));
     }
 
-    /**
-     * 测试用户状态更新
-     */
-    @Test
-    void updateUserStatus_ActiveToInactive() {
-        User mockUser = new User();
-        mockUser.setUser_id(1);
-        mockUser.setStatus((byte) 1); // 初始状态：活跃
-//        when(userMapper.getUserById(1)).thenReturn(mockUser);
-        //when(userMapper.updateUserStatus(1, (byte) 0)).thenReturn(1);
 
-        //ResponseEntity<Map<String, Object>> response = userController.updateUserStatus(1, "0", "1");
-
-        //assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
-        //assertEquals("用户状态更新成功", response.getBody().get("message"));
-    }
-
-    /**
-     * 测试用户列表分页查询
-     */
     @Test
     void getUserList_Pagination() {
         User mockAdmin = new User();
@@ -816,8 +723,6 @@ class UserControllerTest {
                 createMockUser(3, "user2"),
                 createMockUser(4, "user3")
         );
-//        when(userMapper.getUsersByCondition(anyMap())).thenReturn(userList);
-        //when(userMapper.countUsersByCondition(anyMap())).thenReturn(3);
 
         Map<String, Object> params = new HashMap<>();
         params.put("page", "1");
@@ -839,9 +744,7 @@ class UserControllerTest {
         }
     }
 
-    /**
-     * 测试用户登录密码错误
-     */
+
     @Test
     void login_WrongPassword() {
         Map<String, Object> loginData = new HashMap<>();
@@ -852,7 +755,6 @@ class UserControllerTest {
         // 模拟数据库查询结果
         User mockUser = new User();
         mockUser.setPassword("correct_password"); // 密码不匹配
-//        when(userMapper.getUserByUsername("testuser")).thenReturn(mockUser);
 
         Map<String, Object> response = userController.login(loginData);
 
@@ -860,9 +762,7 @@ class UserControllerTest {
         assertEquals("用户名或密码错误", response.get("message"));
     }
 
-    /**
-     * 测试用户注册时用户名已存在
-     */
+  
     @Test
     void registerUser_DuplicateUsername() {
         Map<String, String> registerData = new HashMap<>();
@@ -874,13 +774,9 @@ class UserControllerTest {
         registerData.put("gender", "0");
         registerData.put("password", "Test@123");
 
-        // 模拟用户名已存在
-        //when(userMapper.checkUsernameExists("existing_user")).thenReturn(1);
-
         ResponseEntity<Map<String, Object>> response = userController.registerUser(registerData);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
-        //assertEquals("用户名已存在", response.getBody().get("message"));
     }
 
     // 辅助方法：创建模拟用户
