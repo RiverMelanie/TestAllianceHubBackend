@@ -16,6 +16,10 @@ public class ConferenceDTO {
     private String endTime;
     private String coverUrl;
     private String createTime;
+
+    public ConferenceDTO() {
+    }
+
     public ConferenceDTO(Integer id, String name, String creatorName, String sponsor, String agenda,
                          String guests, String location, String content, String category,
                          String startTime, String endTime, String coverUrl, String createTime) {
