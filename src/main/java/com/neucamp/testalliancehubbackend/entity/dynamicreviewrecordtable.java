@@ -22,7 +22,6 @@ public class dynamicreviewrecordtable {
     private String Author;
     @JsonProperty("ReviewResult")
     private Integer ReviewResult;
-
     public Integer getReviewerID() {
         return ReviewerID;
     }
