@@ -90,25 +90,6 @@ public class MeetingController {
         return meetingMapper.updateMeetingAuditStatus(meeting_id, audit_status);
     }
 
-    @Autowired
-    private ConferenceService conferenceService;
-    @RequestMapping("/getmeetingMobile")
-    public ResponseEntity<List<ConferenceDTO>> getAllConferences() {
-        List<ConferenceDTO> conferences = conferenceService.getAllConferences();
 
-        for (int i = 0; i < conferences.size(); i++) {
-            ConferenceDTO dto = conferences.get(i);
-            System.out.println("第 " + (i + 1) + " 条数据:");
-            System.out.println("  id: " + dto.getId());
-            System.out.println("  标题: " + dto.getName());
-            System.out.println("  创建者: " + dto.getCreatorName());
-            System.out.println("  创建时间: " + dto.getCreateTime());
-            System.out.println("  地点: " + dto.getLocation());
-            System.out.println("  描述: " + dto.getContent());
-            System.out.println("------------------------------------");
-        }
-
-        return ResponseEntity.ok(conferences);
-    }
 
 }
