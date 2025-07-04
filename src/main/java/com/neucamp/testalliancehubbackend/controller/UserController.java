@@ -40,6 +40,12 @@ public class UserController {
 
     private NamingResourcesImpl transactionManager;
 
+    @Autowired
+    public UserController(UserMapper userMapper, CompanyMapper companyMapper) {
+        this.userMapper = userMapper;
+        this.companyMapper = companyMapper;  // 确保正确赋值
+    }
+
     //登录
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, Object> loginData) {
