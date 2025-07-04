@@ -128,19 +128,7 @@ class CompanyControllerTest {
         assertEquals(500, response.getStatusCodeValue());
         assertEquals("服务器内部错误", response.getBody().get("message"));
     }
-    // 新增测试用例：覆盖数据库异常分支
-//    @Test
-//    void getNextCompanyId_DatabaseError() {
-//        when(companyMapper.getNextCompanyId()).thenThrow(new RuntimeException("Database error"));
-//
-//        ResponseEntity<Map<String, Object>> response = companyController.getNextCompanyId();
-//
-//        assertEquals(500, response.getStatusCodeValue());
-//        assertFalse((Boolean) response.getBody().get("success"));
-//        assertEquals("获取企业ID失败", response.getBody().get("message"));
-//    }
 
-    // 新增测试用例：覆盖空字符串参数验证
     @Test
     void registerCompany_EmptyParameters() {
         Map<String, String> registerData = new HashMap<>();
@@ -227,7 +215,6 @@ class CompanyControllerTest {
         assertEquals("注册失败", response.getBody().get("message"));
     }
 
-    // CompanyControllerTest.java 新增测试用例
     @Test
     void registerCompany_AccountExists() {
         // 准备测试数据 - 模拟账号已存在
@@ -242,11 +229,9 @@ class CompanyControllerTest {
 
         // 调用方法
         ResponseEntity<Map<String, Object>> response = companyController.registerCompany(registerData);
-
-        // 验证结果 - 应返回400错误
-        //assertEquals(400, response.getStatusCodeValue());
+       
         assertFalse((Boolean) response.getBody().get("success"));
-        //assertEquals("账号已存在", response.getBody().get("message"));
+
     }
 
     @Test
@@ -261,10 +246,8 @@ class CompanyControllerTest {
         // 调用方法
         ResponseEntity<Map<String, Object>> response = companyController.registerCompany(registerData);
 
-        // 验证结果 - 应触发业务逻辑错误（假设控制器有格式验证）
         assertEquals(500, response.getStatusCodeValue());
         assertFalse((Boolean) response.getBody().get("success"));
-        //assertTrue(response.getBody().get("message").toString().contains("账号格式错误"));
     }
 
     @Test
@@ -299,7 +282,6 @@ class CompanyControllerTest {
         assertEquals("注册失败", response.getBody().get("message"));
     }
 
-    // 新增测试用例：验证联系信息超长的情况
     @Test
     void registerCompany_ContactInfoTooLong() {
         Map<String, String> registerData = new HashMap<>();
@@ -318,7 +300,6 @@ class CompanyControllerTest {
         assertEquals("注册失败", response.getBody().get("message"));
     }
 
-    // 新增测试用例：验证密码超长的情况
     @Test
     void registerCompany_PasswordTooLong() {
         Map<String, String> registerData = new HashMap<>();
@@ -337,7 +318,6 @@ class CompanyControllerTest {
         assertEquals("注册失败", response.getBody().get("message"));
     }
 
-    // 新增测试用例：验证账号超长的情况
     @Test
     void registerCompany_AccountTooLong() {
         Map<String, String> registerData = new HashMap<>();
@@ -356,16 +336,14 @@ class CompanyControllerTest {
         assertEquals("注册失败", response.getBody().get("message"));
     }
 
-    // 新增测试用例：验证获取下一个公司ID返回负数的情况
+
     @Test
     void getNextCompanyId_NegativeResult() {
         when(companyMapper.getNextCompanyId()).thenReturn(-1);
 
         ResponseEntity<Map<String, Object>> response = companyController.getNextCompanyId();
 
-        //assertEquals(500, response.getStatusCodeValue());
         //assertFalse((Boolean) response.getBody().get("success"));
-        //assertEquals("获取企业ID失败", response.getBody().get("message"));
     }
     @Test
     void registerCompany_AllEmptyParameters() {
