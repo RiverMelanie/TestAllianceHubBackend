@@ -26,6 +26,7 @@ public class ManagerIndustryDynamicController {
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "8") int pageSize
     ) {
+
         // 计算偏移量
         int offset = (pageNum - 1) * pageSize;
 
@@ -66,6 +67,6 @@ public class ManagerIndustryDynamicController {
     }
     @RequestMapping("/delDynamic")
     public int delDynamic(int id){
-            return managerIndustryDynamicMapper.delDynamic(id);
+        return managerIndustryDynamicMapper.delDynamic(id);
     }
 }

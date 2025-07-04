@@ -15,13 +15,13 @@ public interface IndustryDynamicMapper {
             "SELECT * FROM industry_dynamic " +
             "<where>" +
             "<if test='title != null and title != \"\"'>" +
-            "AND title LIKE #{title}" +
+            "AND title LIKE CONCAT('%', #{title}, '%')" +
             "</if>" +
             "<if test='author != null and author != \"\"'>" +
-            "AND author LIKE #{author}" +
+            "AND author LIKE CONCAT('%', #{author}, '%')" +
             "</if>" +
             "</where>" +
-            "ORDER BY dynamic_id " +
+            "ORDER BY dynamicId " +
             "LIMIT #{pageSize} OFFSET #{offset}" +
             "</script>")
     List<IndustryDynamic> searchDynamics(Map<String, Object> params);
@@ -30,10 +30,10 @@ public interface IndustryDynamicMapper {
             "SELECT COUNT(*) FROM industry_dynamic " +
             "<where>" +
             "<if test='title != null and title != \"\"'>" +
-            "AND title LIKE #{title}" +
+            "AND title LIKE CONCAT('%', #{title}, '%')" +
             "</if>" +
             "<if test='author != null and author != \"\"'>" +
-            "AND author LIKE #{author}" +
+            "AND author LIKE CONCAT('%', #{author}, '%')" +
             "</if>" +
             "</where>" +
             "</script>")

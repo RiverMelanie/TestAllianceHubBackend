@@ -33,6 +33,7 @@ public class IndustryDynamicController {
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "8") int pageSize
     ) {
+
         // 计算偏移量
         int offset = (pageNum - 1) * pageSize;
 
@@ -56,13 +57,14 @@ public class IndustryDynamicController {
         result.put("data", filteredDynamics);
 
         result.put("totalCount", totalCount);
+        System.out.println(result);
         return result;
     }
 
 
     @RequestMapping("/addreviewrecord")
     public void addReviewRecord(@RequestBody dynamicreviewrecordtable dynamicreviewrecordtable){
-                industryDynamicMapper.addReviewRecord(
+        industryDynamicMapper.addReviewRecord(
                 dynamicreviewrecordtable.getReviewerID(),
                 dynamicreviewrecordtable.getTitle(),
                 dynamicreviewrecordtable.getNewsImage(),

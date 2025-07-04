@@ -97,7 +97,7 @@ public class AdminUserController {
             user.setStatus(userMap.get("status") != null ?
                     ((Number) userMap.get("status")).byteValue() : null);
             user.setIs_super(userMap.get("is_super") != null ?
-                    ((Number) userMap.get("is_super")).byteValue() : null);
+                    ((Number) userMap.get("is_super")).byteValue() : (byte)0);
 
             int result = adminUserMapper.update(user);
             return result > 0
