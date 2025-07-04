@@ -1,11 +1,14 @@
 package com.neucamp.testalliancehubbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class dynamicreviewrecordtable {
+
     @JsonProperty("ReviewerID")
+    @NotNull(message = "审核人 ID 不能为空")
     private Integer ReviewerID;
     @JsonProperty("Title")
     private String Title;
@@ -18,8 +21,7 @@ public class dynamicreviewrecordtable {
     @JsonProperty("Author")
     private String Author;
     @JsonProperty("ReviewResult")
-    private String ReviewResult;
-
+    private Integer ReviewResult;
     public Integer getReviewerID() {
         return ReviewerID;
     }
@@ -68,11 +70,11 @@ public class dynamicreviewrecordtable {
         Author = author;
     }
 
-    public String getReviewResult() {
+    public Integer getReviewResult() {
         return ReviewResult;
     }
 
-    public void setReviewResult(String reviewResult) {
+    public void setReviewResult(Integer reviewResult) {
         ReviewResult = reviewResult;
     }
 

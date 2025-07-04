@@ -39,11 +39,13 @@ public interface IndustryDynamicMapper {
             "</script>")
     int searchTotalCount(Map<String, Object> params);
 
-    @Insert("insert into industry_dynamic values(null,#{publisherId},#{title},#{content},#{summary},#{author},#{imageUrl},now(),#{auditStatus})")
+    @Insert("insert into industry_dynamic " +
+            "(dynamicId,publisherId, title, content, summary, author, imageUrl, createTime, auditStatus) " + // 显式列名，用数据库的 auditStatus
+            "values(null, #{publisherId}, #{title}, #{content}, #{summary}, #{author}, #{imageUrl}, now(), #{auditStatus})")
     int addDynamic(IndustryDynamic industryDynamic);
 
     @Insert("insert into dynamicreviewrecordtable values (#{ReviewerID},#{title},#{newsImage},#{content},#{newsSummary},#{author},#{reviewResult})")
-    int addReviewRecord(Integer ReviewerID,String title, String newsImage, String content, String newsSummary, String author, String reviewResult);
+    int addReviewRecord(Integer ReviewerID,String title, String newsImage, String content, String newsSummary, String author, Integer reviewResult);
 
     @Select("select * from industry_dynamic where title=#{Title} and author=#{Author}")
     IndustryDynamic searchreviewdDynamics(dynamicreviewrecordtable dynamicreviewrecordtable);

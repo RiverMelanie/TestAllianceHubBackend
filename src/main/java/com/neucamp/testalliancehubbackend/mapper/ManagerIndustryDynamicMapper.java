@@ -26,12 +26,17 @@ public interface ManagerIndustryDynamicMapper {
     @Update("update industry_dynamic set publisherId=#{publisherId},title=#{title},content=#{content},summary=#{summary},author=#{author},imageUrl=#{imageUrl},createTime=now(),auditStatus=#{auditStatus} where dynamicId=#{dynamicId}")
     int upDynamic(IndustryDynamic industryDynamic);
 
-    @Update("update dynamicreviewrecordtable set ReviewerID=#{ReviewerID},Content=#{Content},NewsSummary=#{NewsSummary},Author=#{Author},ReviewResult=#{ReviewResult} where Title=#{Title} and NewsImage=#{NewsImage}")
+
+    @Update("update dynamicreviewrecordtable set NewsImage=#{NewsImage},Content=#{Content},NewsSummary=#{NewsSummary},ReviewResult=#{ReviewResult} where ReviewerID=#{ReviewerID} and Title=#{Title} and Author=#{Author}")
     int upReviewDynamic(dynamicreviewrecordtable dynamicreviewrecordtable);
+
+
+
     @Update("update industry_dynamic set createTime=now(),auditStatus=#{auditStatus} where publisherId=#{publisherId} and title=#{title} and content=#{content} and summary=#{summary} and author=#{author} and imageUrl=#{imageUrl}")
     void upDynamicPlus(IndustryDynamic industryDynamic);
     @Delete("delete from dynamicreviewrecordtable where ReviewResult=1 ")
     void cleanDynamics();
     @Delete("delete from industry_dynamic where dynamicId=#{id}")
     int delDynamic(int id);
+
 }
