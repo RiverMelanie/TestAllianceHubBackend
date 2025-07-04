@@ -142,7 +142,6 @@ class AdminUserControllerTest {
 
         ResponseEntity<String> response = adminUserController.createUser(userMap);
 
-        // 修改为期望400而不是500
         assertEquals(400, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("用户创建失败"));
     }
@@ -156,7 +155,6 @@ class AdminUserControllerTest {
 
         ResponseEntity<String> response = adminUserController.updateUser(userMap);
 
-        // 修改为期望400而不是500
         assertEquals(400, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("用户更新失败"));
     }
