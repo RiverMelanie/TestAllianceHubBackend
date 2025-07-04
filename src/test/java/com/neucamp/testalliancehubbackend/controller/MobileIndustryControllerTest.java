@@ -72,6 +72,7 @@ class DynamicAnalysisControllerTest {
         LocalDate startDate = LocalDate.now().minusDays(30);
         LocalDate endDate = LocalDate.now();
 
+
         // 执行测试
         ResponseEntity<List<Map<String, Object>>> response =
                 controller.getTopClickedDynamics(startDate, endDate);
