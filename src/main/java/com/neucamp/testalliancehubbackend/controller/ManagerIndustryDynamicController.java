@@ -53,7 +53,9 @@ public class ManagerIndustryDynamicController {
     }
     @RequestMapping("/upReviewDynamic")
     public int upReviewDynamic(@RequestBody dynamicreviewrecordtable dynamicreviewrecordtable){
+
         int count=managerIndustryDynamicMapper.upReviewDynamic(dynamicreviewrecordtable);
+
         if(count>0){
             IndustryDynamic industryDynamic=industryDynamicMapper.searchreviewdDynamics(dynamicreviewrecordtable);
             industryDynamic.setAuditStatus(1);

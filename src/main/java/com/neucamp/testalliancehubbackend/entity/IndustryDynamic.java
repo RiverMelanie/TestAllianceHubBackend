@@ -1,7 +1,10 @@
 package com.neucamp.testalliancehubbackend.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,52 +19,69 @@ public class IndustryDynamic{
     /**
      * 动态ID，自增
      */
-
+    @TableId("dynamicId")
     private Integer dynamicId;
+
+    public IndustryDynamic() {
+    }
+
     /**
      * 发布者ID
      */
-
+    @TableId("publisherId")
     private Integer publisherId;
 
     /**
      * 标题
      */
-
+    @TableId("title")
+    @NotBlank(message = "标题不能为空")
     private String title;
 
     /**
      * 内容
      */
-
+    @TableId("content")
     private String content;
+
+    public IndustryDynamic(Integer dynamicId, Integer publisherId, String title, String content, String summary, String author, String imageUrl, Date createTime, Integer auditStatus) {
+        this.dynamicId = dynamicId;
+        this.publisherId = publisherId;
+        this.title = title;
+        this.content = content;
+        this.summary = summary;
+        this.author = author;
+        this.imageUrl = imageUrl;
+        this.createTime = createTime;
+        this.auditStatus = auditStatus;
+    }
 
     /**
      * 摘要
      */
-
+    @TableId("summary")
     private String summary;
 
     /**
      * 作者
      */
-
+    @TableId("author")
     private String author;
 
 
-
+    @TableId("imageUrl")
     private String imageUrl;
 
     /**
      * 创建时间，默认当前时间
      */
-
+    @TableId("createTime")
     private Date createTime;
 
     /**
-     * 审核状态，默认 0
+     * 审核状态，
      */
-
+    @Column(name = "auditStatus")
     private Integer auditStatus;
     public Integer getDynamicId() {
         return dynamicId;
