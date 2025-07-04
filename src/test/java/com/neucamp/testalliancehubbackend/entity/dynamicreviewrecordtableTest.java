@@ -25,7 +25,7 @@ class dynamicreviewrecordtableTest {
         record.setContent("测试内容");
         record.setNewsSummary("摘要");
         record.setAuthor("作者");
-        record.setReviewResult("通过");
+        record.setReviewResult(1);
 
         // Assert
         assertThat(record.getReviewerID()).isEqualTo(1);
@@ -34,7 +34,7 @@ class dynamicreviewrecordtableTest {
         assertThat(record.getContent()).isEqualTo("测试内容");
         assertThat(record.getNewsSummary()).isEqualTo("摘要");
         assertThat(record.getAuthor()).isEqualTo("作者");
-        assertThat(record.getReviewResult()).isEqualTo("通过");
+        assertThat(record.getReviewResult()).isEqualTo(1);
     }
 
     // 测试 @NotNull 注解对 ReviewerID 字段的约束

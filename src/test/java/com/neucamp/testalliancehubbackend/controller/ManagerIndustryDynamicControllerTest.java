@@ -113,7 +113,7 @@ class ManagerIndustryDynamicControllerTest {
         reviewRecord.setReviewerID(1);
         reviewRecord.setTitle("测试标题");
         reviewRecord.setNewsImage("image.jpg");
-        reviewRecord.setReviewResult("通过");
+        reviewRecord.setReviewResult(1);
 
         // 模拟查询动态结果
         IndustryDynamic industryDynamic = new IndustryDynamic();
@@ -147,7 +147,7 @@ class ManagerIndustryDynamicControllerTest {
         reviewRecord.setReviewerID(1);
         reviewRecord.setTitle("测试标题");
         reviewRecord.setNewsImage("image.jpg");
-        reviewRecord.setReviewResult("通过");
+        reviewRecord.setReviewResult(1);
 
         // 模拟 Mapper 返回更新失败（影响行数 0）
         when(managerIndustryDynamicMapper.upReviewDynamic(reviewRecord)).thenReturn(0);

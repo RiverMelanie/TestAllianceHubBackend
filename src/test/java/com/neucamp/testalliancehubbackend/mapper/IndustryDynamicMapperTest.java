@@ -105,7 +105,7 @@ class IndustryDynamicMapperTest {
         String content = "审核内容_" + LocalDateTime.now().toString();
         String newsSummary = "审核摘要";
         String author = "测试作者";
-        String reviewResult = "通过";
+        Integer reviewResult = 1;
 
         when(industryDynamicMapper1.addDynamic(any(IndustryDynamic.class))).thenReturn(1);
         when(industryDynamicMapper1.addReviewRecord(
@@ -223,10 +223,10 @@ class IndustryDynamicMapperTest {
         // 配置 Mock 对象：title 为 null 时抛出 NullPointerException
         doThrow(new NullPointerException())
                 .when(industryDynamicMapper1)
-                .addReviewRecord(anyInt(), isNull(), anyString(), anyString(), anyString(), anyString(), anyString());
+                .addReviewRecord(anyInt(), isNull(), anyString(), anyString(), anyString(), anyString(), anyInt());
 
         assertThrows(NullPointerException.class,
-                () -> industryDynamicMapper1.addReviewRecord(1, null, "image.jpg", "content", "summary", "author", "通过"),
+                () -> industryDynamicMapper1.addReviewRecord(1, null, "image.jpg", "content", "summary", "author", 1),
                 "标题为 null 时应抛出异常"
         );
     }

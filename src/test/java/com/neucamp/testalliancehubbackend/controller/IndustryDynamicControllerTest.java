@@ -124,12 +124,12 @@ class IndustryDynamicControllerTest {
         record.setContent("内容...");
         record.setNewsSummary("摘要");
         record.setAuthor("作者");
-        record.setReviewResult("通过");
+        record.setReviewResult(1);
 
         when(industryDynamicMapper.addReviewRecord(
                 anyInt(), any(String.class), any(String.class),
                 any(String.class), any(String.class),
-                any(String.class), any(String.class))).thenReturn(1);
+                any(String.class), any(Integer.class))).thenReturn(1);
 
         mockMvc.perform(post("/addreviewrecord")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,7 +139,7 @@ class IndustryDynamicControllerTest {
         verify(industryDynamicMapper, times(1)).addReviewRecord(
                 anyInt(), any(String.class), any(String.class),
                 any(String.class), any(String.class),
-                any(String.class), any(String.class));
+                any(String.class), any(Integer.class));
     }
 
     // 添加动态记录：标题为空
@@ -187,7 +187,7 @@ class IndustryDynamicControllerTest {
         verify(industryDynamicMapper, never()).addReviewRecord(
                 anyInt(), any(String.class), any(String.class),
                 any(String.class), any(String.class),
-                any(String.class), any(String.class));
+                any(String.class), any(Integer.class));
     }
     //分页边界值测试
     @Test

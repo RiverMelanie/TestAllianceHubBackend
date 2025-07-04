@@ -21,7 +21,7 @@ public class dynamicreviewrecordtable {
     @JsonProperty("Author")
     private String Author;
     @JsonProperty("ReviewResult")
-    private String ReviewResult;
+    private Integer ReviewResult;
 
     public Integer getReviewerID() {
         return ReviewerID;
@@ -71,11 +71,11 @@ public class dynamicreviewrecordtable {
         Author = author;
     }
 
-    public String getReviewResult() {
+    public Integer getReviewResult() {
         return ReviewResult;
     }
 
-    public void setReviewResult(String reviewResult) {
+    public void setReviewResult(Integer reviewResult) {
         ReviewResult = reviewResult;
     }
 
