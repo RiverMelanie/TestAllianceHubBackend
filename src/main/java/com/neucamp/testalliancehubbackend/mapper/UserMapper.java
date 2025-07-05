@@ -59,11 +59,20 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE token = #{token}")
     User getUserByToken(String token);
 
-    @Select("SELECT u.* FROM user u " +
+    @Select("SELECT u.user_id, u.company_id, u.username, u.nickname, u.phone, u.email FROM user u " +
             "JOIN company c ON u.company_id = c.company_id " +
             "WHERE u.username = #{username} AND u.password = #{password} AND c.company_name = #{companyName}")
+    @Results({
+            @Result(column = "user_id", property = "user_id"),
+            @Result(column = "company_id", property = "company_id"),
+            @Result(column = "username", property = "username"),
+            @Result(column = "nickname", property = "nickname"),
+            @Result(column = "phone", property = "phone"),
+            @Result(column = "email", property = "email")
+    })
     User finduserForLogin(@Param("username") String username,
                           @Param("password") String password,
                           @Param("companyName") String companyName);
+
 
 }

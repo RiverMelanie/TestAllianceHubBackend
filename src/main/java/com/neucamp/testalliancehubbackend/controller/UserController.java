@@ -31,7 +31,12 @@ import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(
+        origins = "*",
+        allowedHeaders = "*",
+        methods = {RequestMethod.POST, RequestMethod.GET},
+        maxAge = 3600
+)
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -40,10 +45,15 @@ public class UserController {
 
     @Autowired
     private CompanyMapper companyMapper;
-    @Autowired
-    UserService userService;
+
 
     private NamingResourcesImpl transactionManager;
+
+    @Autowired
+    public UserController(UserMapper userMapper, CompanyMapper companyMapper) {
+        this.userMapper = userMapper;
+        this.companyMapper = companyMapper;  // 确保正确赋值
+    }
 
     //登录
     @PostMapping("/login")
@@ -372,27 +382,6 @@ public class UserController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
-    //移动端登录
-    @RequestMapping("/mobileLogin")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        User user = userService.login(
-                loginRequest.getUsername(),
-                loginRequest.getPassword(),
-                loginRequest.getCompanyName()
-        );
 
-        if (user != null) {
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("user_id", user.getUser_id());
-            userInfo.put("username", user.getUsername());
-            userInfo.put("nickname", user.getNickname());
-            userInfo.put("email", user.getEmail());
-            userInfo.put("phone", user.getPhone());
-            return ResponseEntity.ok(userInfo);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Collections.singletonMap("message", "用户名、密码或公司名错误"));
-        }
-    }
 
 }

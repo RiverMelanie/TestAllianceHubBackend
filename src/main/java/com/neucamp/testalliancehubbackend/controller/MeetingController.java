@@ -90,15 +90,6 @@ public class MeetingController {
         return meetingMapper.updateMeetingAuditStatus(meeting_id, audit_status);
     }
 
-    @Autowired
-    private ConferenceService conferenceService;
-    @RequestMapping("/getmeetingMobile")
-    public ResponseEntity<List<ConferenceDTO>> getAllConferences() {
-        List<ConferenceDTO> conferences = conferenceService.getAllConferences();
-        System.out.println("第一条数据示例: " + conferences.get(0));
-        System.out.println("创建者字段是否存在: " + conferences.get(0).getCreatorName() != null);
-        System.out.println("创建时间字段是否存在: " + conferences.get(0).getCreateTime() != null);
-        return ResponseEntity.ok(conferences);
-    }
+
 
 }
