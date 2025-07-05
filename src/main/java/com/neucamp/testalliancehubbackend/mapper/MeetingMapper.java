@@ -1,5 +1,6 @@
 package com.neucamp.testalliancehubbackend.mapper;
 
+import com.neucamp.testalliancehubbackend.entity.ConferenceDTO;
 import com.neucamp.testalliancehubbackend.entity.Meeting;
 import org.apache.ibatis.annotations.*;
 
@@ -31,4 +32,28 @@ public interface MeetingMapper {
 
     @Update("update meeting set audit_status=#{audit_status} where meeting_id=#{meeting_id}")
     int updateMeetingAuditStatus(int meeting_id, int audit_status);
+
+    @Select("SELECT m.meeting_id, m.meeting_name, m.creator_name, md.sponsor, md.agenda, md.guests, md.location, " +
+            "m.content, mc.category_name, m.start_time, m.end_time, m.cover_url, m.create_time " +
+            "FROM meeting m " +
+            "LEFT JOIN meeting_detail md ON m.meeting_id = md.meeting_id " +
+            "LEFT JOIN meeting_category mc ON md.category_id = mc.category_id")
+    @Results({
+            @Result(column = "meeting_id", property = "id"),
+            @Result(column = "meeting_name", property = "name"),
+            @Result(column = "creator_name", property = "creatorName"),
+            @Result(column = "sponsor", property = "sponsor"),
+            @Result(column = "agenda", property = "agenda"),
+            @Result(column = "guests", property = "guests"),
+            @Result(column = "location", property = "location"),
+            @Result(column = "content", property = "content"),
+            @Result(column = "category_name", property = "category"),
+            @Result(column = "start_time", property = "startTime"),
+            @Result(column = "end_time", property = "endTime"),
+            @Result(column = "cover_url", property = "coverUrl"),
+            @Result(column = "create_time", property = "createTime")
+    })
+    List<ConferenceDTO> getAllConferences();
+
+
 }
