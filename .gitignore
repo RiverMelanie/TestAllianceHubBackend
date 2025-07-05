@@ -31,4 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/java/com/neucamp/testalliancehubbackend/entity/LoginRequest.java
