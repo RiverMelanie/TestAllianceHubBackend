@@ -2,12 +2,16 @@ package com.neucamp.testalliancehubbackend.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.neucamp.testalliancehubbackend.Service.ConferenceService;
+import com.neucamp.testalliancehubbackend.entity.ConferenceDTO;
 import com.neucamp.testalliancehubbackend.entity.Meeting;
 import com.neucamp.testalliancehubbackend.mapper.MeetingMapper;
+import org.slf4j.LoggerFactory;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,12 +19,19 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+        origins = "*",
+        allowedHeaders = "*",
+        methods = {RequestMethod.POST, RequestMethod.GET},
+        maxAge = 3600
+)
 public class MeetingController {
     @Autowired
     MeetingMapper meetingMapper;
@@ -72,11 +83,13 @@ public class MeetingController {
     public int updateMeeting(@RequestBody Meeting meeting) {
         return meetingMapper.updateMeeting(meeting);
     }
-
     @RequestMapping("/updateStatu")
     public int updateMeetingAuditStatus(@RequestBody Map<String,Object> params){
         int meeting_id = Integer.parseInt(params.get("meeting_id").toString());
         int audit_status = Integer.parseInt(params.get("audit_status").toString());
         return meetingMapper.updateMeetingAuditStatus(meeting_id, audit_status);
     }
+
+
+
 }
