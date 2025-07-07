@@ -1,19 +1,16 @@
 package com.neucamp.testalliancehubbackend.controller;
 
-import com.neucamp.testalliancehubbackend.entity.IndustryDynamic;
-import com.neucamp.testalliancehubbackend.entity.Visit;
 import com.neucamp.testalliancehubbackend.mapper.MobileIndustryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -22,51 +19,21 @@ public class MobileIndustryController {
     @Autowired
     private MobileIndustryMapper mobileIndustryMapper;
 
-    @GetMapping("/mobiletopClicked")
+    @GetMapping("/api/dynamics/mobiletopClicked")
     public ResponseEntity<List<Map<String, Object>>> getTopClickedDynamics(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateUtc,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateUtc) {
 
-        // 验证日期范围有效性
-        if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("结束日期不能早于开始日期");
-        }
-        // 将日期转换为当天的开始和结束时刻
-        LocalDateTime startTime = startDate.atStartOfDay();
-        LocalDateTime endTime = endDate.atTime(23, 59, 59);
+        // 将 UTC 时间转换为数据库时区（如东八区）
+        ZoneId dbTimeZone = ZoneId.of("Asia/Shanghai"); // 数据库时区
+        LocalDateTime startDateDb = startDateUtc.atZone(ZoneId.of("UTC")).withZoneSameInstant(dbTimeZone).toLocalDateTime();
+        LocalDateTime endDateDb = endDateUtc.atZone(ZoneId.of("UTC")).withZoneSameInstant(dbTimeZone).toLocalDateTime();
 
-        // 转换时间格式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         List<Map<String, Object>> result = mobileIndustryMapper.selectTopDynamicsByTimeRange(
-                startTime.format(formatter),
-                endTime.format(formatter)
+                startDateDb.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                endDateDb.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         );
 
-        System.out.println("DEBUG: 返回 " + result.size() + " 条热门动态数据");
         return ResponseEntity.ok(result);
-    }
-
-
-    @RequestMapping("/dynamics")
-    public ResponseEntity<List<IndustryDynamic>> getAllDynamicsByKeyword(@RequestParam(required = false) String keyword) {
-        String searchKeyword = Optional.ofNullable(keyword).orElse("");
-        List<IndustryDynamic> dynamics = mobileIndustryMapper.getAllDynamicsByKeyword(searchKeyword);
-        return ResponseEntity.ok(dynamics);
-
-    }
-
-    @PostMapping("/recordVisit")
-    public ResponseEntity<String> recordVisit(@RequestBody Visit visit) {
-        // 增强验证
-        if (visit.getDynamic_id() == null) {
-            return ResponseEntity.badRequest().body("dynamic_id不能为空");
-        }
-        if (visit.getUser_id() == null) {
-            return ResponseEntity.badRequest().body("user_id不能为空");
-        }
-
-        visit.setVisit_time(LocalDateTime.now());
-        mobileIndustryMapper.insertVisit(visit);
-        return ResponseEntity.ok("记录成功");
     }
 }

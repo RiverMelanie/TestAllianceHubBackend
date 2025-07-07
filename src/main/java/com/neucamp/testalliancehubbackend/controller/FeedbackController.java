@@ -42,6 +42,7 @@ public class FeedbackController {
     //用于会议用户数据分析
     @RequestMapping("/feedbackStats")
     public List<FeedbackCatStatsDTO> getFeedbackCategoryStats() {
+        System.out.println("会议数据分析");
         List<FeedbackCatStatsDTO> status = feedbackMapper.getCategoryFeedbackStats();
         return status;
     }
