@@ -1,5 +1,7 @@
 package com.neucamp.testalliancehubbackend.controller;
 
+import com.neucamp.testalliancehubbackend.Service.UserService;
+import com.neucamp.testalliancehubbackend.entity.LoginRequest;
 import com.neucamp.testalliancehubbackend.entity.User;
 import com.neucamp.testalliancehubbackend.mapper.CompanyMapper;
 import com.neucamp.testalliancehubbackend.mapper.UserMapper;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +31,12 @@ import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(
+        origins = "*",
+        allowedHeaders = "*",
+        methods = {RequestMethod.POST, RequestMethod.GET},
+        maxAge = 3600
+)
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -38,7 +46,14 @@ public class UserController {
     @Autowired
     private CompanyMapper companyMapper;
 
+
     private NamingResourcesImpl transactionManager;
+
+    @Autowired
+    public UserController(UserMapper userMapper, CompanyMapper companyMapper) {
+        this.userMapper = userMapper;
+        this.companyMapper = companyMapper;  // 确保正确赋值
+    }
 
     //登录
     @PostMapping("/login")
@@ -251,7 +266,6 @@ public class UserController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
-
     // 修改密码
     @PostMapping("/user/{userId}/change-password")
     public ResponseEntity<Map<String, Object>> changePassword(
@@ -368,5 +382,6 @@ public class UserController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
 
 }
