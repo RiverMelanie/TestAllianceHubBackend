@@ -1,5 +1,7 @@
 package com.neucamp.testalliancehubbackend.controller;
 
+import com.neucamp.testalliancehubbackend.entity.IndustryDynamic;
+import com.neucamp.testalliancehubbackend.entity.Visit;
 import com.neucamp.testalliancehubbackend.mapper.MobileIndustryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +13,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
