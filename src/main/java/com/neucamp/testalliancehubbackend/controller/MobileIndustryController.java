@@ -36,4 +36,26 @@ public class MobileIndustryController {
 
         return ResponseEntity.ok(result);
     }
+
+    @RequestMapping("/dynamics")
+    public ResponseEntity<List<IndustryDynamic>> getAllDynamicsByKeyword(@RequestParam(required = false) String keyword) {
+        String searchKeyword = Optional.ofNullable(keyword).orElse("");
+        List<IndustryDynamic> dynamics = mobileIndustryMapper.getAllDynamicsByKeyword(searchKeyword);
+        return ResponseEntity.ok(dynamics);
+    }
+    
+    @PostMapping("/recordVisit")
+    public ResponseEntity<String> recordVisit(@RequestBody Visit visit) {
+        // 增强验证
+        if (visit.getDynamic_id() == null) {
+            return ResponseEntity.badRequest().body("dynamic_id不能为空");
+        }
+        if (visit.getUser_id() == null) {
+            return ResponseEntity.badRequest().body("user_id不能为空");
+        }
+
+        visit.setVisit_time(LocalDateTime.now());
+        mobileIndustryMapper.insertVisit(visit);
+        return ResponseEntity.ok("记录成功");
+    }
 }
