@@ -13,11 +13,11 @@ import java.util.Map;
 @Mapper
 public interface MobileIndustryMapper {
     @Select(
-            "SELECT i.dynamic_id AS dynamicId, i.title, COUNT(v.visit_id) AS clickCount " +
+            "SELECT i.dynamicId AS dynamicId, i.title, COUNT(v.visit_id) AS clickCount " +
                     "FROM mobile_dynamic_visit v " +
-                    "INNER JOIN industry_dynamic i ON v.dynamic_id = i.dynamic_id " +
+                    "INNER JOIN industry_dynamic i ON v.dynamic_id = i.dynamicId " +
                     "WHERE v.visit_time BETWEEN #{startTime} AND #{endTime} " +
-                    "GROUP BY i.dynamic_id, i.title " +
+                    "GROUP BY i.dynamicId, i.title " +
                     "ORDER BY clickCount DESC " +
                     "LIMIT 10"
     )
