@@ -1,6 +1,7 @@
 package com.neucamp.testalliancehubbackend.Service;
 
 import com.neucamp.testalliancehubbackend.entity.MeetingFeedback;
+import com.neucamp.testalliancehubbackend.mapper.FeedbackMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
